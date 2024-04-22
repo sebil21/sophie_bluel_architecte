@@ -229,7 +229,7 @@ a:hover {
 
 /*LOGIN*/
 .login {
-	width: 50%;
+	width: 30%;
 	margin: auto;
 	margin-bottom: 355px;
 }
@@ -264,4 +264,7 @@ a:hover {
 
 .login a {
 	color: black;
+}
+.login p {
+	color: red;
 }
