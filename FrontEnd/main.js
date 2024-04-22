@@ -53,4 +53,3 @@ displayBtn()
 const buttons = document.querySelectorAll('.btn-filter');
 
 // Ajout d'un écouteur d'événements à chaque bouton
-
