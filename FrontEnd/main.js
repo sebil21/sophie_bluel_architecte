@@ -7,6 +7,7 @@ const galerie = document.querySelector('.gallery')
 
 // Utiliser JS pour ajouter à la galerie les travaux de l’architecte que j'ai récupéré
 async function ajouterGalerie(projets) {
+    galerie.innerHTML="" // vider la galerie
     for(let i = 0; i < projets.length; i++){
         const article = projets[i]
         // Créer la balise principale
@@ -43,13 +44,24 @@ async function displayBtn() {
      btn.textContent = element.name
      btn.id = element.id
      btn.classList.add('btn-filter', 'greenBtn')
+     btn.addEventListener("click", function(event){
+        event.preventDefault()
+        const filterProjet = projets.filter(function(p){
+            return p.categoryId === element.id
+        })
+        ajouterGalerie(filterProjet)
+     })
      categoryDiv.appendChild(btn)   
     });
 }
 displayBtn()
 
 // Filtre au clic par catégorie
-//*****Sélection des boutons */
-const buttons = document.querySelectorAll('.btn-filter');
+//*****Sélection bouton TOUS */
+const all = document.querySelector('.all-btn');
 
-// Ajout d'un écouteur d'événements à chaque bouton
+// Ajout d'un écouteur d'événements sur le bouton TOUS
+all.addEventListener("click", function(event){
+    event.preventDefault()
+    ajouterGalerie(projets)
+})
