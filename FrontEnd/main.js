@@ -36,32 +36,62 @@ console.log(categorie)
 
 const categoryDiv = document.querySelector('.category')
 
-// Boutons Tous, Objets, Appartements, Hotels & Restaurants
-//*****Création des boutons = OK */
+// Boutons Objets, Appartements, Hotels & Restaurants
 async function displayBtn() {
-    categorie.forEach(function(element) {
+    categorie.forEach(function(categorie) {
      const btn = document.createElement("button")
-     btn.textContent = element.name
-     btn.id = element.id
+     btn.textContent = categorie.name
+     btn.id = categorie.id
      btn.classList.add('btn-filter', 'greenBtn')
+
      btn.addEventListener("click", function(event){
         event.preventDefault()
         const filterProjet = projets.filter(function(p){
-            return p.categoryId === element.id
+            return p.categoryId === categorie.id
         })
+
         ajouterGalerie(filterProjet)
      })
+
      categoryDiv.appendChild(btn)   
     });
 }
 displayBtn()
 
-// Filtre au clic par catégorie
-//*****Sélection bouton TOUS */
+// Bouton TOUS
 const all = document.querySelector('.all-btn');
 
-// Ajout d'un écouteur d'événements sur le bouton TOUS
 all.addEventListener("click", function(event){
     event.preventDefault()
     ajouterGalerie(projets)
 })
+
+// Bouton éditer après connexion au site
+function replaceBtnByIcon () {
+    if (window.localStorage.getItem("token")) {
+
+        // On vide la class categorie
+        categoryDiv.innerHTML = '';
+
+        // Créer les nouveaux éléments pour l'icone et l'entête
+        const iconeEntete = document.createElement("i");
+        iconeEntete.classList.add("fa-regular", "fa-pen-to-square");
+        const enTeteText = document.createElement("p");
+        enTeteText.textContent = "Mode édition";
+        const editionDiv = document.querySelector(".edition");
+        
+        const icon = document.createElement("i");
+        icon.classList.add("fa-regular", "fa-pen-to-square");
+        const iconText = document.createElement("p");
+        iconText.textContent = "Modifier";
+        const iconeDiv = document.querySelector(".icone");
+
+        // Relier les enfants aux parents 
+        iconeDiv.appendChild(icon);
+        iconeDiv.appendChild(iconText);
+        editionDiv.appendChild(iconeEntete)
+        editionDiv.appendChild(enTeteText)
+
+    }
+}
+replaceBtnByIcon ()
