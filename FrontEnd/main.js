@@ -66,32 +66,43 @@ all.addEventListener("click", function(event){
     ajouterGalerie(projets)
 })
 
-// Bouton éditer après connexion au site
-function replaceBtnByIcon () {
-    if (window.localStorage.getItem("token")) {
 
-        // On vide la class categorie
-        categoryDiv.innerHTML = '';
 
-        // Créer les nouveaux éléments pour l'icone et l'entête
-        const iconeEntete = document.createElement("i");
-        iconeEntete.classList.add("fa-regular", "fa-pen-to-square");
-        const enTeteText = document.createElement("p");
-        enTeteText.textContent = "Mode édition";
-        const editionDiv = document.querySelector(".edition");
-        
-        const icon = document.createElement("i");
-        icon.classList.add("fa-regular", "fa-pen-to-square");
-        const iconText = document.createElement("p");
-        iconText.textContent = "Modifier";
-        const iconeDiv = document.querySelector(".icone");
+// Récupérer le token depuis le stockage local
+const login = window.localStorage.getItem("token");
 
-        // Relier les enfants aux parents 
-        iconeDiv.appendChild(icon);
-        iconeDiv.appendChild(iconText);
-        editionDiv.appendChild(iconeEntete)
-        editionDiv.appendChild(enTeteText)
+// Si User connecté
+if (login) {
+    console.log("Utilisateur connecté");
 
-    }
-}
-replaceBtnByIcon ()
+    // Si user connecté, supprimer filtres
+    categoryDiv.innerHTML = '';
+
+    // Créer boutons d'édition
+    const iconeEntete = document.createElement("i");
+    iconeEntete.classList.add("fa-regular", "fa-pen-to-square");
+    const enTeteText = document.createElement("p");
+    enTeteText.textContent = "Mode édition";
+    const editionDiv = document.querySelector(".edition");
+    editionDiv.style.display = "flex";
+
+    const icon = document.createElement("i");
+    icon.classList.add("fa-regular", "fa-pen-to-square");
+    const iconText = document.createElement("p");
+    iconText.textContent = "Modifier";
+    const iconeDiv = document.querySelector(".icone");
+
+    // Relier les enfants aux parents
+    iconeDiv.appendChild(icon);
+    iconeDiv.appendChild(iconText);
+    editionDiv.appendChild(iconeEntete);
+    editionDiv.appendChild(enTeteText);
+
+    // Se déconnecter
+    const logout = document.querySelector(".logout");
+    logout.textContent = "Logout";
+
+    logout.addEventListener("click", function () {
+        window.localStorage.removeItem("token");
+    });
+} 
