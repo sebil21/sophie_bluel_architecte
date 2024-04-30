@@ -70,6 +70,9 @@ all.addEventListener("click", function(event){
 
 // Récupérer le token depuis le stockage local
 const login = window.localStorage.getItem("token");
+const iconeDiv = document.querySelector(".icone");
+const editionDiv = document.querySelector(".edition");
+const logout = document.querySelector(".logout");
 
 // Si User connecté
 if (login) {
@@ -83,14 +86,12 @@ if (login) {
     iconeEntete.classList.add("fa-regular", "fa-pen-to-square");
     const enTeteText = document.createElement("p");
     enTeteText.textContent = "Mode édition";
-    const editionDiv = document.querySelector(".edition");
     editionDiv.style.display = "flex";
 
     const icon = document.createElement("i");
     icon.classList.add("fa-regular", "fa-pen-to-square");
     const iconText = document.createElement("p");
     iconText.textContent = "Modifier";
-    const iconeDiv = document.querySelector(".icone");
 
     // Relier les enfants aux parents
     iconeDiv.appendChild(icon);
@@ -99,10 +100,50 @@ if (login) {
     editionDiv.appendChild(enTeteText);
 
     // Se déconnecter
-    const logout = document.querySelector(".logout");
     logout.textContent = "Logout";
 
-    logout.addEventListener("click", function () {
+    logout.addEventListener("click", function (event) {
+        event.preventDefault()
         window.localStorage.removeItem("token");
+        document.location.reload() //Revenir à la page d'accueil après logout
     });
 } 
+
+
+//AFFICHAGE MODALE AU CLIC DU BOUTON MODIFIER
+
+const modalContainer = document.querySelector(".modal-container")
+const modalWindow = document.querySelector(".modal-window")
+const modalWindowContain = document.querySelector(".modal-window-contain")
+const closeBtn = document.querySelector(".fa-xmark")
+const arrowLeft = document.querySelector(".fa-arrow-left")
+const galleryModal = document.querySelector(".gallery-modal")
+
+
+
+iconeDiv.addEventListener("click", function() {
+    console.log("Modale ouverte")
+    modalContainer.style.display = "flex";
+    //Créer .modal-window-contain
+    const modalTitle = document.createElement("h3");
+    modalTitle.textContent = "Galerie photo";
+    const galleryModal = document.createElement("div");
+    galleryModal.classList.add("gallery-modal")
+    const modalBtnAddImg = document.createElement("button");
+    modalBtnAddImg.textContent = "Ajouter une photo"
+    modalBtnAddImg.classList.add("btn-add-img")
+    // Relier les enfants aux parents
+    modalWindowContain.appendChild(modalTitle);
+    modalWindowContain.appendChild(galleryModal);
+    modalWindowContain.appendChild(modalBtnAddImg);
+
+    ajouterGalerie(projets);
+})
+
+closeBtn.addEventListener("click", function(){
+    console.log("Modale fermé")
+    modalContainer.style.display = "none"
+})
+
+
+// Ajouter galerie dans modale
