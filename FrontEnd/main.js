@@ -5,7 +5,7 @@ const projets = await projetApi.json()
 // Récupérer l'élement du DOM pour la galerie
 const galerie = document.querySelector('.gallery')
 
-// Utiliser JS pour ajouter à la galerie les travaux de l’architecte que j'ai récupéré
+// Ajouter galerie
 async function ajouterGalerie(projets) {
     galerie.innerHTML="" // vider la galerie
     for(let i = 0; i < projets.length; i++){
@@ -27,9 +27,7 @@ async function ajouterGalerie(projets) {
 ajouterGalerie(projets)
 
 
-
-
-// Réalisation du filtre des travaux : Ajout des filtres pour afficher les travaux par catégorie
+// Filtres
 const categorieApi = await fetch("http://localhost:5678/api/categories")
 const categorie = await categorieApi.json()
 console.log(categorie)
@@ -66,8 +64,6 @@ all.addEventListener("click", function(event){
     ajouterGalerie(projets)
 })
 
-
-
 // Récupérer le token depuis le stockage local
 const login = window.localStorage.getItem("token");
 const iconeDiv = document.querySelector(".icone");
@@ -78,10 +74,10 @@ const logout = document.querySelector(".logout");
 if (login) {
     console.log("Utilisateur connecté");
 
-    // Si user connecté, supprimer filtres
+    // Si user connecté, supprimer filtres et remplacer par bouton d'édition
     categoryDiv.innerHTML = '';
 
-    // Créer boutons d'édition
+    // Création boutons d'édition
     const iconeEntete = document.createElement("i");
     iconeEntete.classList.add("fa-regular", "fa-pen-to-square");
     const enTeteText = document.createElement("p");
@@ -93,7 +89,6 @@ if (login) {
     const iconText = document.createElement("p");
     iconText.textContent = "Modifier";
 
-    // Relier les enfants aux parents
     iconeDiv.appendChild(icon);
     iconeDiv.appendChild(iconText);
     editionDiv.appendChild(iconeEntete);
@@ -111,8 +106,7 @@ if (login) {
 } 
 
 
-//AFFICHAGE MODALE
-
+// Affichage modale galerie
 const modalContainer = document.querySelector(".modal-container")
 const modalWindow = document.querySelector(".modal-window")
 const modalWindowContain = document.querySelector(".modal-window-contain")
@@ -121,100 +115,167 @@ const arrowLeft = document.querySelector(".fa-arrow-left")
 const galleryModal = document.querySelector(".gallery-modal")
 const modalForm = document.querySelector(".modal-form")
 
-
-iconeDiv.addEventListener("click", function() {
+iconeDiv.addEventListener("click", function(event) {
+    event.preventDefault()
     console.log("Modale ouverte")
     modalContainer.style.display = "flex";
     modalWindowContain.innerHTML = ""
-    //Créer .modal-window-contain
+
     const modalTitle = document.createElement("h3");
     modalTitle.textContent = "Galerie photo";
-    // const galleryModal = document.createElement("div");
-    // galleryModal.classList.add("gallery-modal")
+
     const modalBtnAddImg = document.createElement("button");
     modalBtnAddImg.textContent = "Ajouter une photo"
     modalBtnAddImg.classList.add("btn-add-img")
-    // Relier les enfants aux parents
+
     modalWindowContain.appendChild(modalTitle);
     modalWindowContain.appendChild(galleryModal);
     modalWindowContain.appendChild(modalBtnAddImg);
 
-    // Création formulaire
-    modalBtnAddImg.addEventListener("click", function(){
-        console.log("Valider la photo")
-        arrowLeft.style.display = "flex";
-        galleryModal.innerHTML = ""
-        modalTitle.textContent = "Ajout photo"
-        modalBtnAddImg.textContent = "Valider"
-        modalBtnAddImg.classList.add("grey-btn")
+    // Affichage modale formulaire
+     modalBtnAddImg.addEventListener("click", function(event){
+         event.preventDefault()
+         console.log("Valider la photo")
+         arrowLeft.style.display = "flex";
+         galleryModal.innerHTML = ""
+         modalTitle.textContent = "Ajout photo"
+         modalBtnAddImg.textContent = "Valider"
+         modalBtnAddImg.classList.add("grey-btn")
 
-        const form = document.createElement("form")
-        form.classList.add("form-contain")
-        form.action = "#"
-        form.method = "post"
+         const form = document.createElement("form")
+         form.classList.add("form-contain")
+         form.action = "#"
+         form.method = "post"
 
-        const addImgDiv = document.createElement("div")
-        addImgDiv.classList.add("add-img")
+         const addImgDiv = document.createElement("div")
+         addImgDiv.classList.add("add-img")
 
-        const iconeImg = document.createElement("i")
-        iconeImg.classList.add("fa-regular", "fa-image")
+         const iconeImg = document.createElement("i")
+         iconeImg.classList.add("fa-regular", "fa-image")
 
-        const imageLabel = document.createElement("label")
-        imageLabel.setAttribute("for", "file")
-        imageLabel.textContent = "+ Ajouter photo"
+         const imageLabel = document.createElement("label")
+         imageLabel.setAttribute("for", "file")
+         imageLabel.textContent = "+ Ajouter photo"
 
-        const imageInput = document.createElement("input")
-        imageInput.type = "file";
-        imageInput.id = "file";
-        imageInput.name = "image";
+         const imageInput = document.createElement("input")
+         imageInput.type = "file";
+         imageInput.id = "file";
+         imageInput.name = "image";
 
-        const imagePreview = document.createElement("img")
-        imagePreview.src = "#";
-        imagePreview.alt = "Aperçu de l'image";
+         const imagePreview = document.createElement("img")
+         imagePreview.src = "#";
+         imagePreview.alt = "Aperçu de l'image";
+         imagePreview.style.display = "none"
 
-        const imageInfo = document.createElement("p")
-        imageInfo.textContent = "jpg, png : 4mo max"
+         const imageInfo = document.createElement("p")
+         imageInfo.textContent = "jpg, png : 4mo max"
 
-        addImgDiv.appendChild(iconeImg)
-        addImgDiv.appendChild(imageLabel)
-        addImgDiv.appendChild(imageInput)
-        addImgDiv.appendChild(imagePreview)
-        addImgDiv.appendChild(imageInfo)
+         addImgDiv.appendChild(iconeImg)
+         addImgDiv.appendChild(imageLabel)
+         addImgDiv.appendChild(imageInput)
+         addImgDiv.appendChild(imagePreview)
+         addImgDiv.appendChild(imageInfo)
 
-        const titleLabel = document.createElement("label")
-        titleLabel.setAttribute("for", "title")
-        titleLabel.textContent = "Titre"
+         const titleLabel = document.createElement("label")
+         titleLabel.setAttribute("for", "title")
+         titleLabel.textContent = "Titre"
 
-        const titleInput = document.createElement("input")
-        titleInput.type = "text"
-        titleInput.name = "title"
-        titleInput.id = "title"
+         const titleInput = document.createElement("input")
+         titleInput.type = "text"
+         titleInput.name = "title"
+         titleInput.id = "title"
 
-        const categoryLabel = document.createElement("label")
-        categoryLabel.setAttribute("for", "category")
-        categoryLabel.textContent = "Catégorie"
+         const categoryLabel = document.createElement("label")
+         categoryLabel.setAttribute("for", "category")
+         categoryLabel.textContent = "Catégorie"
 
-        const categorySelect = document.createElement("select")
-        categorySelect.name = "category"
-        categorySelect.id = "category"
+         const categorySelect = document.createElement("select")
+         categorySelect.name = "category"
+         categorySelect.id = "category"
 
-        form.appendChild(addImgDiv)
-        form.appendChild(titleLabel)
-        form.appendChild(titleInput)
-        form.appendChild(categoryLabel)
-        form.appendChild(categorySelect)
+         form.appendChild(addImgDiv)
+         form.appendChild(addImgDiv)
+         form.appendChild(titleLabel)
+         form.appendChild(titleInput)
+         form.appendChild(categoryLabel)
+         form.appendChild(categorySelect)
 
-        modalForm.appendChild(form)
+         modalForm.appendChild(form)
+
+    // Prévisualisation de l'image ajouté
+        imageLabel.addEventListener("click", async function (event){
+            event.preventDefault()
+            imageInput.click()
+        })
+        imageInput.addEventListener("change", async function(event) {
+            event.preventDefault()
+            const img = imageInput.files[0]
+            console.log(img)
+                if(img){
+              const reader = new FileReader()
+            reader.onload = ()=> {
+                const imgUrl = reader.result
+                imagePreview.src = imgUrl
+                imagePreview.style.display = "flex"
+                iconeImg.style.display = "none"
+                imageLabel.style.display = "none"
+                imageInput.style.display = "none"
+                imageInfo.style.display = "none"
+                }
+            reader.readAsDataURL(img)  
+            } else {
+                 alert("Taille de l'image supérieure à 4mo")
+             }
+            
+        })
+
+        // Affichage catégorie dans formulaire
+        async function displayCategoryModal() {
+            categorie.forEach(function(categorie) {
+                const option = document.createElement("option")
+                option.value = categorie.id
+                option.textContent = categorie.name
+                categorySelect.appendChild(option)
+            })
+        }
+        displayCategoryModal()
+
+        // Bouton valider en vert lorsque tous les champs sont remplis
+        async function formCompleted() {
+            form.addEventListener("input", function (event){
+            event.preventDefault()
+            if (titleInput.value && categorySelect.value && imageInput.value)
+            modalBtnAddImg.classList.add("green-btn")
+            console.log("Tous les champs sont remplis")
+            })
+        }
+        formCompleted()
+
+        // Methode POST modale
+        form.addEventListener("submit", function(event) {
+            event.preventDefault()
+            fetch(projets, {
+                method: "POST",
+                headers: {"Content-Type": "multipart/form-data"},
+                body: JSON.stringify(form)
+            })
+        })
     })
 })
 
-closeBtn.addEventListener("click", function(){
+// Fermeture modale
+closeBtn.addEventListener("click", function(event){
+    event.preventDefault()
     console.log("Modale fermé")
     modalContainer.style.display = "none"
     document.location.reload()
 })
 
+// Flèche gauche modale
+arrowLeft.addEventListener("click", function (){
+    console.log("Retour à la modale initiale")
 
+})
 
 // Ajouter galerie dans modale
 async function displayGalleryModal (projets) {
@@ -234,9 +295,6 @@ async function displayGalleryModal (projets) {
     }
 }
 displayGalleryModal(projets)
-
-
-
 
 // Supprimer image galerie dans modale
 
