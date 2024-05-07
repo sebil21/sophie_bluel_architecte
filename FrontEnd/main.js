@@ -288,11 +288,11 @@ closeBtn.addEventListener("click", function(event){
 })
 
 // Flèche gauche modale
-arrowLeft.addEventListener("click", function (){
+arrowLeft.addEventListener("click", function (event){
+    event.preventDefault()
     console.log("Retour à la modale initiale")
-    modalWindowContain.innerHTML = ""
-    arrowLeft.style.display = "none"
-    return galleryModal
+    modalForm.style.display = "none"
+    galleryModal.style.display = "flex"
 
 })
 
@@ -307,16 +307,26 @@ async function displayGalleryModal (projets) {
         image.alt = article.title
         const trash = document.createElement("i")
         trash.classList.add("fa-solid", "fa-trash-can")
-
+        trash.id = image.id
         figure.appendChild(trash)
         figure.appendChild(image)
         galleryModal.appendChild(figure)
+
+        // Méthode DELETE, supprimer image dans modale
+        trash.addEventListener("click", function(event){
+            event.preventDefault()
+            console.log("tu as cliqué sur la corbeille")
+            const imageId = trash.id
+            const response = fetch("http://localhost:5678/api/works/1", {
+                   method: "DELETE",
+                   headers: { "Authorization": "Bearer " + login},
+             })
+             if (response.status == imageId) {
+                 event.target.parentNode.remove();
+            }
+        })
     }
 }
 displayGalleryModal(projets)
-
-// Supprimer image galerie dans modale
-
-  
-        
+    
        
