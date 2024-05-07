@@ -321,9 +321,11 @@ async function displayGalleryModal (projets) {
                    method: "DELETE",
                    headers: { "Authorization": "Bearer " + login},
              })
-             if (response.status == imageId) {
-                 event.target.parentNode.remove();
-            }
+             if(response.status == 200) {
+                const deleteApi = await fetch("http://localhost:5678/api/works/1")
+                const delete = await deleteApi.json()
+                imageId.removeItem()
+             }
         })
     }
 }
