@@ -194,7 +194,6 @@ iconeDiv.addEventListener("click", function(event) {
          categorySelect.id = "category"
 
          form.appendChild(addImgDiv)
-         form.appendChild(addImgDiv)
          form.appendChild(titleLabel)
          form.appendChild(titleInput)
          form.appendChild(categoryLabel)
@@ -211,7 +210,7 @@ iconeDiv.addEventListener("click", function(event) {
             event.preventDefault()
             const img = imageInput.files[0]
             console.log(img)
-                if(img){
+                if(img.size < 4000000){
               const reader = new FileReader()
             reader.onload = ()=> {
                 const imgUrl = reader.result
@@ -232,15 +231,15 @@ iconeDiv.addEventListener("click", function(event) {
         // Affichage catégorie dans formulaire
         async function displayCategoryModal() {
             categorie.forEach(function(categorie) {
-                const option = document.createElement("option")
-                option.value = categorie.id
-                option.textContent = categorie.name
-                categorySelect.appendChild(option)
+                const categoryOption = document.createElement("option")
+                categoryOption.value = categorie.id
+                categoryOption.textContent = categorie.name
+                categorySelect.appendChild(categoryOption)
             })
         }
         displayCategoryModal()
 
-        // Bouton valider en vert lorsque tous les champs sont remplis
+        // Bouton input en vert lorsque tous les champs sont remplis
         async function formCompleted() {
             form.addEventListener("input", function (event){
             event.preventDefault()
@@ -251,15 +250,32 @@ iconeDiv.addEventListener("click", function(event) {
         }
         formCompleted()
 
-        // Methode POST modale
-        form.addEventListener("submit", function(event) {
-            event.preventDefault()
-            fetch(projets, {
-                method: "POST",
-                headers: {"Content-Type": "multipart/form-data"},
-                body: JSON.stringify(form)
-            })
-        })
+        // Methode POST
+         modalBtnAddImg.addEventListener("click", async function(event) {
+             event.preventDefault()
+             console.log(imageInput.files)
+            //  const dataForm = {
+            //     "title": titleInput.value,
+            //     "image": imageInput.files[0],
+            //     "category": categorySelect.value
+            //  }
+            const dataForm = new FormData()
+            dataForm.append("title", titleInput.value)
+            dataForm.append("category", categorySelect.value)
+            dataForm.append("image", imageInput.files[0])
+             const response = await fetch("http://localhost:5678/api/works", {
+                   method: "POST",
+                   headers: { "Authorization": "Bearer " + login},
+                   body: dataForm
+             })
+             if(response.status == 201) {
+                const newProjectApi = await fetch("http://localhost:5678/api/works")
+                const newProject = await newProjectApi.json()
+                ajouterGalerie(newProject)
+                modalContainer.style.display = "none"
+
+             }
+         })
     })
 })
 
@@ -274,6 +290,9 @@ closeBtn.addEventListener("click", function(event){
 // Flèche gauche modale
 arrowLeft.addEventListener("click", function (){
     console.log("Retour à la modale initiale")
+    modalWindowContain.innerHTML = ""
+    arrowLeft.style.display = "none"
+    return galleryModal
 
 })
 
@@ -298,3 +317,6 @@ displayGalleryModal(projets)
 
 // Supprimer image galerie dans modale
 
+  
+        
+       
