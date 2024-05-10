@@ -254,11 +254,6 @@ iconeDiv.addEventListener("click", function(event) {
          modalBtnAddImg.addEventListener("click", async function(event) {
              event.preventDefault()
              console.log(imageInput.files)
-            //  const dataForm = {
-            //     "title": titleInput.value,
-            //     "image": imageInput.files[0],
-            //     "category": categorySelect.value
-            //  }
             const dataForm = new FormData()
             dataForm.append("title", titleInput.value)
             dataForm.append("category", categorySelect.value)
@@ -273,7 +268,6 @@ iconeDiv.addEventListener("click", function(event) {
                 const newProject = await newProjectApi.json()
                 ajouterGalerie(newProject)
                 modalContainer.style.display = "none"
-
              }
          })
     })
@@ -292,14 +286,13 @@ arrowLeft.addEventListener("click", function (event){
     event.preventDefault()
     console.log("Retour à la modale initiale")
     modalForm.style.display = "none"
-    galleryModal.style.display = "flex"
-
+    modalWindowContain.style.display = "flex"
 })
 
 // Ajouter galerie dans modale
 async function displayGalleryModal (projets) {
     modalWindowContain.innerHTML = ""
-    for(let i = 0; i < projets.length; i++){
+     for(let i = 0; i < projets.length; i++){
         const article = projets[i] 
         const figure = document.createElement("figure")
         const image = document.createElement("img")
@@ -308,27 +301,33 @@ async function displayGalleryModal (projets) {
         const trash = document.createElement("i")
         trash.classList.add("fa-solid", "fa-trash-can")
         trash.id = image.id
+        trash.dataset.imageId = article.id
         figure.appendChild(trash)
         figure.appendChild(image)
         galleryModal.appendChild(figure)
 
-        // Méthode DELETE, supprimer image dans modale
-        trash.addEventListener("click", function(event){
-            event.preventDefault()
-            console.log("tu as cliqué sur la corbeille")
-            const imageId = trash.id
-            const response = fetch("http://localhost:5678/api/works/1", {
-                   method: "DELETE",
-                   headers: { "Authorization": "Bearer " + login},
-             })
-             if(response.status == 200) {
-                const deleteApi = await fetch("http://localhost:5678/api/works/1")
-                const delete = await deleteApi.json()
-                imageId.removeItem()
-             }
-        })
-    }
+        // Suppression image depuis la modale
+        console.log(trash.length)
+            trash.addEventListener("click", async function(event){
+                event.preventDefault()
+                console.log("tu as cliqué sur la corbeille")
+                const imageId = trash.id
+                const deleteResponse = await fetch ("http://localhost:5678/api/works/1", {
+                    method: "DELETE",
+                    headers: { "Authorization": "Bearer " + login},
+                    body: imageId
+                })
+                if(deleteResponse == 200) {
+                    console.log("L'image a été supprimée")
+                    const deleteApi = await fetch("http://localhost:5678/api/works/1")
+                    const removeImage = await deleteApi.json()
+                    ajouterGalerie(removeImage)
+                    imageId.removeItem()
+                    modalContainer.style.display = "none"
+                 } else {
+                    console.log("La suppression de l'image n'a pas fonctionnée")
+                 }
+            })
+        }
 }
 displayGalleryModal(projets)
-    
-       
