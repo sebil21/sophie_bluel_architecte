@@ -285,8 +285,11 @@ closeBtn.addEventListener("click", function(event){
 arrowLeft.addEventListener("click", function (event){
     event.preventDefault()
     console.log("Retour à la modale initiale")
+    modalWindowContain.innerHTML = ""
+    arrowLeft.style.display = "none"
     modalForm.style.display = "none"
     modalWindowContain.style.display = "flex"
+    galleryModal.style.display = "flex"
 })
 
 // Ajouter galerie dans modale
