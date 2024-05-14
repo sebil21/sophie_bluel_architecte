@@ -135,6 +135,7 @@ li:hover {
 
 .gallery img {
 	width: 100%;
+	height: 490.89px;
 
 }
 #contact {
@@ -387,6 +388,7 @@ h3{
 
 .gallery-modal img {
 	width: 80px;
+	height: 107px;
 	margin-bottom: 25px;
 }
 .gallery-modal figure {
@@ -497,5 +499,3 @@ h3{
 	padding-left: 20px;
 	margin-bottom: 47px;
 }
-
-
