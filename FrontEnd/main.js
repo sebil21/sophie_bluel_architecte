@@ -123,7 +123,7 @@ iconeDiv.addEventListener("click", function(event) {
      modalBtnAddImg.addEventListener("click", function(event){
         //Input image
          event.preventDefault()
-         console.log("Valider la photo")
+         console.log("Ajouter une photo")
          arrowLeft.style.display = "flex"
          galleryModal.innerHTML = ""
          modalTitle.textContent = "Ajout photo"
@@ -248,13 +248,26 @@ iconeDiv.addEventListener("click", function(event) {
          })
      })
 })
+
 // Revenir à la modale principale
 arrowLeft.addEventListener("click", function(event){
-    event.preventDefault();
-    console.log("Retour à la modal principale")
-    modalContainer.style.display = "flex"
+    event.preventDefault()
     modalWindowContain.innerHTML = ""
+    console.log("Retour à la modal principale")
+    const contenuModale = document.querySelector(".modal-window-contain")
+    contenuModale.style.display = "flex"
+    galleryModal.innerHTML = ""
     arrowLeft.style.display = "none"
+    // form.style.display = "none"
+    const modalTitle = document.createElement("h3")
+    modalTitle.textContent = "Galerie photo"
+    const modalBtnAddImg = document.createElement("button")
+    modalBtnAddImg.textContent = "Ajouter une photo"
+    modalBtnAddImg.classList.add("btn-add-img")
+    contenuModale.appendChild(modalTitle)
+    contenuModale.appendChild(galleryModal)
+    galleryModal.style.display = "flex"
+    contenuModale.appendChild(modalBtnAddImg)
     displayGalleryModal(projets)
 })
 
@@ -268,7 +281,7 @@ closeBtn.addEventListener("click", function(event){
 
 // Ajouter galerie dans modale
 async function displayGalleryModal(projets) {
-    modalWindowContain.innerHTML = ""
+    // modalWindowContain.innerHTML = ""
      for(let i = 0; i < projets.length; i++){
         const article = projets[i] 
         const figure = document.createElement("figure")
